@@ -1,13 +1,17 @@
 from setuptools import setup
+
 from __version__ import VERSION
 
-with open("requirements.txt") as f:
-    required = f.read().splitlines()
-
+deps = ["pandas"]
+gcs_deps = ["google-cloud-storage>=2.6.0"]
+test_requires = ["pytest"]
 
 setup(
     name="dcraft",
     version=VERSION,
     packages=["dcraft"],
-    install_requires=required,
+    install_requires=deps,
+    test_requires=test_requires,
+    extra_requirements={"gcs": gcs_deps, "test": test_requires},
+    author="Shuhei Kishi",
 )
