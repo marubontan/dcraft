@@ -15,8 +15,8 @@ def read_layer_data(
         metadata.project_name,
         metadata.layer,
         id,
-        metadata.content_type,
         metadata.format,
+        metadata.content_type,
     )
     if metadata.layer == "raw":
         layer_data = RawLayerData(

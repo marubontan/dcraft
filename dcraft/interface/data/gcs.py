@@ -1,17 +1,20 @@
 import json
-import os
+from io import BytesIO, StringIO
 from typing import Any
 
 import pandas as pd
+from google.cloud.storage import Client
 
 from dcraft.domain.error import ContentExtensionMismatch, NotCoveredContentType
 from dcraft.domain.type.enum import ContentType
 from dcraft.interface.data.base import DataRepository
 
 
-class LocalDataRepository(DataRepository):
-    def __init__(self, dir_path: str):
-        self._dir_path = dir_path
+class GcsDataRepository(DataRepository):
+    def __init__(self, project_id: str, bucket_name: str):
+        self._bucket_name = bucket_name
+        self._client = Client(project=project_id)
+        self._bucket = self._client.get_bucket(self._bucket_name)
 
     def load(
         self,
@@ -24,17 +27,22 @@ class LocalDataRepository(DataRepository):
         path = self._compose_path(project_name, layer_name, id, format)
         if content_type == ContentType.DF:
             if format == "csv":
-                data = pd.read_csv(path)
+                blob = self._bucket.blob(path)
+                csv_string = StringIO(blob.download_as_text())
+                data = pd.read_csv(csv_string)
             elif format == "parquet":
-                data = pd.read_parquet(path)
+                blob = self._bucket.blob(path)
+                parquet_bytes = BytesIO(blob.download_as_bytes())
+                data = pd.read_parquet(parquet_bytes)
             else:
                 raise ContentExtensionMismatch(
                     "This content can't be saved with this extension."
                 )
         elif content_type == ContentType.DICT:
             if format == "json":
-                with open(path, "r") as f:
-                    data = json.load(f)
+                blob = self._bucket.blob(path)
+                dict_bytes = blob.download_as_text()
+                data = json.loads(dict_bytes)
             else:
                 raise ContentExtensionMismatch(
                     "This content can't be saved with this extension."
@@ -53,20 +61,25 @@ class LocalDataRepository(DataRepository):
         content_type: ContentType,
     ):
         path = self._compose_path(project_name, layer_name, id, format)
-        self._mkdirs(path)
+        blob = self._bucket.blob(path)
         if content_type == ContentType.DF:
             if format == "csv":
-                content.to_csv(path, index=False)
+                data = content.to_csv(index=False)
+                blob.upload_from_string(data)
             elif format == "parquet":
-                content.to_parquet(path, index=False)
+                buffer = BytesIO()
+                content.to_parquet(buffer, index=False)
+                buffer.seek(0)
+                blob.upload_from_file(buffer)
+                buffer.close()
             else:
                 raise ContentExtensionMismatch(
                     "This content can't be saved with this extension."
                 )
         elif content_type == ContentType.DICT:
             if format == "json":
-                with open(path, "w") as f:
-                    json.dump(content, f)
+                data = json.dumps(content)
+                blob.upload_from_string(data)
             else:
                 raise ContentExtensionMismatch(
                     "This content can't be saved with this extension."
@@ -74,13 +87,7 @@ class LocalDataRepository(DataRepository):
         else:
             raise NotCoveredContentType("This content type is not covered.")
 
-    def _mkdirs(self, path: str):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-
     def _compose_path(
         self, project_name: str, layer_name: str, id: str, format: str
     ) -> str:
-        file_path = (
-            f"{os.path.join(self._dir_path, project_name, layer_name, id)}.{format}"
-        )
-        return file_path
+        return f"{project_name}/{layer_name}/{id}.{format}"
