@@ -5,17 +5,14 @@ from dcraft.domain.type.enum import ContentType
 
 
 class DataRepository(ABC):
-    def __init__(self, path: str):
-        self._path = path
-
     @abstractmethod
     def load(
         self,
         project_name: str,
         layer_name: str,
         id: str,
-        content_type: ContentType,
         format: str,
+        content_type: ContentType,
     ) -> Any:
         pass
 
