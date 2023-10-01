@@ -15,13 +15,17 @@ from ...setting import SCOPE_PATH
 def test_refined_layer_dict_data_saving(tmp_path):
     content = {"a": 1, "b": 2}
     refined_data_layer = RefinedLayerData(
-        "test-id", "test-project", content, None, datetime.now(), None, None, None
+        None, "test-project", content, None, datetime.now(), None, None, None
     )
 
     data_repository = LocalDataRepository(tmp_path)
     metadata_repository = LocalMetadataRepository(tmp_path)
     refined_data_layer.save("json", data_repository, metadata_repository)
-    with open(os.path.join(tmp_path, "test-project", "refined", "test-id.json")) as f:
+    with open(
+        os.path.join(
+            tmp_path, "test-project", "refined", f"{refined_data_layer.id}.json"
+        )
+    ) as f:
         assert json.load(f) == content
 
     with open(os.path.join(tmp_path, "metadata.jsonl")) as f:
@@ -35,7 +39,7 @@ def test_refined_layer_dict_data_saving(tmp_path):
 def test_refined_layer_pandas_data_saving(tmp_path):
     content = pd.DataFrame({"a": [1], "b": [2]})
     refined_data_layer = RefinedLayerData(
-        "test-id", "test-project", content, None, datetime.now(), None, None, None
+        None, "test-project", content, None, datetime.now(), None, None, None
     )
 
     data_repository = LocalDataRepository(tmp_path)
@@ -43,7 +47,9 @@ def test_refined_layer_pandas_data_saving(tmp_path):
     refined_data_layer.save("csv", data_repository, metadata_repository)
 
     saved_content = pd.read_csv(
-        os.path.join(tmp_path, "test-project", "refined", "test-id.csv")
+        os.path.join(
+            tmp_path, "test-project", "refined", f"{refined_data_layer.id}.csv"
+        )
     )
     assert saved_content.equals(content)
 

@@ -12,9 +12,8 @@ def create_raw(
     description: Optional[str] = None,
     extra_info: Optional[dict] = None,
 ) -> RawLayerData:
-    id = str(uuid4())
     return RawLayerData(
-        id,
+        None,
         project_name,
         content,
         author,

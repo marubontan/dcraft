@@ -15,14 +15,16 @@ from ...setting import SCOPE_PATH
 def test_raw_layer_dict_data_saving(tmp_path):
     content = {"a": 1, "b": 2}
     raw_data_layer = RawLayerData(
-        "test-id", "test-project", content, None, datetime.now(), None, None
+        None, "test-project", content, None, datetime.now(), None, None
     )
 
     data_repository = LocalDataRepository(tmp_path)
     metadata_repository = LocalMetadataRepository(tmp_path)
     raw_data_layer.save("json", data_repository, metadata_repository)
 
-    with open(os.path.join(tmp_path, "test-project", "raw", "test-id.json")) as f:
+    with open(
+        os.path.join(tmp_path, "test-project", "raw", f"{raw_data_layer.id}.json")
+    ) as f:
         saved_content = json.load(f)
         assert saved_content == content
 
@@ -37,7 +39,7 @@ def test_raw_layer_dict_data_saving(tmp_path):
 def test_raw_layer_pandas_data_saving(tmp_path):
     content = pd.DataFrame({"a": [1], "b": [2]})
     raw_data_layer = RawLayerData(
-        "test-id", "test-project", content, None, datetime.now(), None, None
+        None, "test-project", content, None, datetime.now(), None, None
     )
 
     data_repository = LocalDataRepository(tmp_path)
@@ -45,7 +47,7 @@ def test_raw_layer_pandas_data_saving(tmp_path):
     raw_data_layer.save("csv", data_repository, metadata_repository)
 
     saved_content = pd.read_csv(
-        os.path.join(tmp_path, "test-project", "raw", "test-id.csv")
+        os.path.join(tmp_path, "test-project", "raw", f"{raw_data_layer.id}.csv")
     )
     assert saved_content.equals(content)
 
