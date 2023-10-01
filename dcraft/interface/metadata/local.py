@@ -11,7 +11,7 @@ from dcraft.interface.metadata.setting import LOCAL_METADATA_NAME
 
 class LocalMetadataRepository(MetadataRepository):
     def __init__(self, path):
-        super().__init__(path)
+        self._path = path
         self._metadata_path = self._compose_path()
 
     def load(self, id: str) -> Metadata:
