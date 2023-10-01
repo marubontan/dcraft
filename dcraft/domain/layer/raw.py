@@ -1,5 +1,6 @@
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any, Optional
+from uuid import uuid4
 
 from dcraft.domain.layer.base import BaseLayerData, Metadata
 from dcraft.interface.data.base import DataRepository
@@ -9,7 +10,7 @@ from dcraft.interface.metadata.base import MetadataRepository
 class RawLayerData(BaseLayerData):
     def __init__(
         self,
-        id: str,
+        id: Optional[str],
         project_name: str,
         content: Any,
         author: Optional[str],
@@ -41,6 +42,9 @@ class RawLayerData(BaseLayerData):
             format=format,
         )
 
+    def _update_id(self):
+        self._id = str(uuid4())
+
     def save(
         self,
         format: str,
@@ -48,6 +52,7 @@ class RawLayerData(BaseLayerData):
         metadata_repository: MetadataRepository,
     ):
         self._validate_format(self.content, format)
+        self._update_id()
         data_repository.save(
             self.content,
             self._project_name,

@@ -15,7 +15,7 @@ def create_trusted(
 ) -> TrustedLayerData:
     id = str(uuid4())
     return TrustedLayerData(
-        id,
+        None,
         project_name,
         content,
         author,

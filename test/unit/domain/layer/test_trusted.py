@@ -15,14 +15,18 @@ from ...setting import SCOPE_PATH
 def test_trusted_layer_dict_data_saving(tmp_path):
     content = {"a": 1, "b": 2}
     trusted_data_layer = TrustedLayerData(
-        "test-id", "test-project", content, None, datetime.now(), None, None, None
+        None, "test-project", content, None, datetime.now(), None, None, None
     )
 
     data_repository = LocalDataRepository(tmp_path)
     metadata_repository = LocalMetadataRepository(tmp_path)
     trusted_data_layer.save("json", data_repository, metadata_repository)
 
-    with open(os.path.join(tmp_path, "test-project", "trusted", "test-id.json")) as f:
+    with open(
+        os.path.join(
+            tmp_path, "test-project", "trusted", f"{trusted_data_layer.id}.json"
+        )
+    ) as f:
         saved_content = json.load(f)
         assert saved_content == content
 
@@ -37,7 +41,7 @@ def test_trusted_layer_dict_data_saving(tmp_path):
 def test_trusted_layer_pandas_data_saving(tmp_path):
     content = pd.DataFrame({"a": [1], "b": [2]})
     trusted_data_layer = TrustedLayerData(
-        "test-id", "test-project", content, None, datetime.now(), None, None, None
+        None, "test-project", content, None, datetime.now(), None, None, None
     )
 
     data_repository = LocalDataRepository(tmp_path)
@@ -45,7 +49,9 @@ def test_trusted_layer_pandas_data_saving(tmp_path):
     trusted_data_layer.save("csv", data_repository, metadata_repository)
 
     saved_content = pd.read_csv(
-        os.path.join(tmp_path, "test-project", "trusted", "test-id.csv")
+        os.path.join(
+            tmp_path, "test-project", "trusted", f"{trusted_data_layer.id}.csv"
+        )
     )
     assert saved_content.equals(content)
 

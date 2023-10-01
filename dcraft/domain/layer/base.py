@@ -42,7 +42,7 @@ class Metadata:
 class BaseLayerData(ABC):
     def __init__(
         self,
-        id: str,
+        id: Optional[str],
         project_name: str,
         content: Any,
         author: Optional[str],
@@ -62,6 +62,10 @@ class BaseLayerData(ABC):
     @property
     def content(self) -> Any:
         return self._content
+
+    @property
+    def id(self) -> Optional[str]:
+        return self._id
 
     @abstractmethod
     def save(self, content: Any, format: str, data_repository: DataRepository):

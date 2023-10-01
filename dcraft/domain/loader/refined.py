@@ -15,7 +15,7 @@ def create_refined(
 ) -> RefinedLayerData:
     id = str(uuid4())
     return RefinedLayerData(
-        id,
+        None,
         project_name,
         content,
         author,
