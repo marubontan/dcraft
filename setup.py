@@ -10,6 +10,8 @@ setup(
     packages=["dcraft"],
     install_requires=deps,
     test_requires=test_requires,
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     extras_require={"gcp": gcp_deps, "test": test_requires},
     author="Shuhei Kishi",
 )
