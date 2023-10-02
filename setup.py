@@ -1,6 +1,6 @@
 from setuptools import setup
 
-from __version__ import VERSION
+from dcraft import __version__
 
 deps = ["pandas", "pyarrow"]
 gcp_deps = ["google-cloud-storage>=2.6.0", "google-cloud-bigquery", "pyarrow"]
@@ -8,7 +8,7 @@ test_requires = ["pytest"]
 
 setup(
     name="dcraft",
-    version=VERSION,
+    version=__version__,
     packages=["dcraft"],
     install_requires=deps,
     test_requires=test_requires,
