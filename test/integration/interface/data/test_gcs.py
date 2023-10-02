@@ -1,12 +1,17 @@
 import json
 from io import BytesIO, StringIO
 
-import pandas as pd
-from google.cloud.storage import Client
 from pytest import mark
 
 from dcraft.domain.type.enum import ContentType
-from dcraft.interface.data.gcs import GcsDataRepository
+
+try:
+    import pandas as pd
+    from google.cloud.storage import Client
+
+    from dcraft.interface.data.gcs import GcsDataRepository
+except ModuleNotFoundError:
+    pass
 
 from ...setting import GCP_PROJECT, GCS_BUCKET
 
