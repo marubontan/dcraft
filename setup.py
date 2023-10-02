@@ -12,6 +12,6 @@ setup(
     packages=["dcraft"],
     install_requires=deps,
     test_requires=test_requires,
-    extra_requirements={"gcp": gcp_deps, "test": test_requires},
+    extras_require={"gcp": gcp_deps, "test": test_requires},
     author="Shuhei Kishi",
 )
