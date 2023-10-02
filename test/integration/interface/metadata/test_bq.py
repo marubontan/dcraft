@@ -4,7 +4,11 @@ from pytest import mark
 
 from dcraft.domain.layer.base import Metadata
 from dcraft.domain.type.enum import ContentType
-from dcraft.interface.metadata.bq import BqMetadataRepository
+
+try:
+    from dcraft.interface.metadata.bq import BqMetadataRepository
+except ModuleNotFoundError:
+    pass
 
 from ...setting import GCP_PROJECT
 
