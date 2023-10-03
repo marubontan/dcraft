@@ -1,4 +1,4 @@
-# dcraft
+# dcraft [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![deployment workflow](https://github.com/marubontan/dcraft/actions/workflows/publish-to-pypi.yml/badge.svg)
 Data management library based on data lake concept especially for data science and machine leaning.  
 This helps your daily job's data management by raw, trusted and refined layer concept from data lake. The data is versioned and saved for each layer.  
 ## Installation
