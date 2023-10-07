@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 from dcraft.domain.error import NoMetadataFound
-from dcraft.domain.layer.base import Metadata
+from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.enum import ContentType
 from dcraft.interface.metadata.base import MetadataRepository
 from dcraft.interface.metadata.setting import LOCAL_METADATA_NAME
@@ -15,6 +15,17 @@ class LocalMetadataRepository(MetadataRepository):
         self._metadata_path = self._compose_path()
 
     def load(self, id: str) -> Metadata:
+        """Load the metadata for a given ID.
+
+        Args:
+            id (str): The ID of the metadata to load.
+
+        Returns:
+            Metadata: The loaded metadata.
+
+        Raises:
+            NoMetadataFound: If no metadata is found for the given ID.
+        """
         with open(self._metadata_path, "r") as f:
             for line in f:
                 metadata_dict = json.loads(line)
@@ -40,6 +51,14 @@ class LocalMetadataRepository(MetadataRepository):
                 raise NoMetadataFound(f"No Metadata found for {id}")
 
     def save(self, metadata: Metadata):
+        """Saves the given metadata to a file.
+
+        Parameters:
+            metadata (Metadata): The metadata object to be saved.
+
+        Returns:
+            None
+        """
         metadata_dict = metadata.asdict
         if metadata_dict["created_at"] is not None:
             metadata_dict["created_at"] = metadata_dict["created_at"].isoformat()

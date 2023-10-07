@@ -1,11 +1,11 @@
 import json
 from io import BytesIO, StringIO
-from typing import Any
 
 import pandas as pd
 from google.cloud.storage import Client
 
 from dcraft.domain.error import ContentExtensionMismatch, NotCoveredContentType
+from dcraft.domain.type.content import CoveredContentType
 from dcraft.domain.type.enum import ContentType
 from dcraft.interface.data.base import DataRepository
 
@@ -23,7 +23,23 @@ class GcsDataRepository(DataRepository):
         id: str,
         format: str,
         content_type: ContentType,
-    ) -> Any:
+    ) -> CoveredContentType:
+        """Load the content from the specified project, layer, and ID, with the given format and content type.
+
+        Args:
+            project_name (str): The name of the project.
+            layer_name (str): The name of the layer.
+            id (str): The ID of the content.
+            format (str): The format of the content.
+            content_type (ContentType): The type of the content.
+
+        Returns:
+            CoveredContentType: The loaded content.
+
+        Raises:
+            ContentExtensionMismatch: If the content can't be saved with the specified extension.
+            NotCoveredContentType: If the content type is not covered.
+        """
         path = self._compose_path(project_name, layer_name, id, format)
         if content_type == ContentType.DF:
             if format == "csv":
@@ -53,13 +69,30 @@ class GcsDataRepository(DataRepository):
 
     def save(
         self,
-        content: Any,
+        content: CoveredContentType,
         project_name: str,
         layer_name: str,
         id: str,
         format: str,
         content_type: ContentType,
     ):
+        """Save the provided content to the specified project, layer, and ID in the given format and content type.
+
+        Args:
+            content (CoveredContentType): The content to be saved.
+            project_name (str): The name of the project.
+            layer_name (str): The name of the layer.
+            id (str): The ID of the content.
+            format (str): The format in which the content should be saved.
+            content_type (ContentType): The type of the content.
+
+        Raises:
+            ContentExtensionMismatch: If the provided format is not compatible with the content type.
+            NotCoveredContentType: If the provided content type is not covered.
+
+        Returns:
+            None
+        """
         path = self._compose_path(project_name, layer_name, id, format)
         blob = self._bucket.blob(path)
         if content_type == ContentType.DF:

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pytest import mark
 
-from dcraft.domain.layer.base import Metadata
+from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.enum import ContentType
 
 try:
