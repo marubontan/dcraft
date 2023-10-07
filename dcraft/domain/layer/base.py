@@ -1,42 +1,14 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 import pandas as pd
 
 from dcraft.domain.error import NotCoveredContentType, NotCoveredFormat
+from dcraft.domain.metadata import Metadata
+from dcraft.domain.type.content import CoveredContentType
 from dcraft.domain.type.enum import ContentType
 from dcraft.interface.data.base import DataRepository
-
-
-@dataclass
-class Metadata:
-    id: str
-    project_name: str
-    layer: str
-    content_type: ContentType
-    author: Optional[str]
-    created_at: datetime
-    description: Optional[str]
-    extra_info: Optional[dict]
-    source_ids: Optional[List[str]]
-    format: str
-
-    @property
-    def asdict(self):
-        return {
-            "id": self.id,
-            "project_name": self.project_name,
-            "layer": self.layer,
-            "content_type": self.content_type.name,
-            "author": self.author,
-            "created_at": self.created_at,
-            "description": self.description,
-            "extra_info": self.extra_info,
-            "source_ids": self.source_ids,
-            "format": self.format,
-        }
 
 
 class BaseLayerData(ABC):
@@ -44,7 +16,7 @@ class BaseLayerData(ABC):
         self,
         id: Optional[str],
         project_name: str,
-        content: Any,
+        content: CoveredContentType,
         author: Optional[str],
         created_at: datetime,
         description: Optional[str],
@@ -69,6 +41,16 @@ class BaseLayerData(ABC):
 
     @abstractmethod
     def save(self, content: Any, format: str, data_repository: DataRepository):
+        """Save the content in the specified format using the provided data repository.
+
+        Args:
+            content (Any): The content to be saved.
+            format (str): The format in which the content should be saved.
+            data_repository (DataRepository): The data repository to use for saving the content.
+
+        Returns:
+            None
+        """
         pass
 
     def _validate_format(self, content: Any, format: str):

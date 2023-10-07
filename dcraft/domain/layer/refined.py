@@ -1,18 +1,37 @@
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import List, Optional
 from uuid import uuid4
 
-from dcraft.domain.layer.base import BaseLayerData, Metadata
+from dcraft.domain.layer.base import BaseLayerData
+from dcraft.domain.metadata import Metadata
+from dcraft.domain.type.content import CoveredContentType
 from dcraft.interface.data.base import DataRepository
 from dcraft.interface.metadata.base import MetadataRepository
 
 
 class RefinedLayerData(BaseLayerData):
+    """This stores refined data and manage.
+
+    This class is used to store refined data.
+    Loaded refined layer data is stored on this class. And also, this manages saving and metadata.
+
+    Attributes:
+        id (str, optional): Unique id for the data and metadata
+        project_name (str): Name of the project
+        content (CoveredContentType): Content of the data
+        author (str, optional): Author of the data
+        created_at (datetime): Created at
+        description (str, optional): Description of the data
+        extra_info (dict, optional): Extra information of the data
+        source_ids (List[str], optional): List of source ids
+
+    """
+
     def __init__(
         self,
         id: Optional[str],
         project_name: str,
-        content: Any,
+        content: CoveredContentType,
         author: Optional[str],
         created_at: datetime,
         description: Optional[str],
@@ -53,6 +72,18 @@ class RefinedLayerData(BaseLayerData):
         data_repository: DataRepository,
         metadata_repository: MetadataRepository,
     ):
+        """Saves the content of this object to the data repository and metadata repository.
+        On the timing of saving, the id of the object will be updated.
+
+        Args:
+            format (str): The format in which to save the content.
+            data_repository (DataRepository): The data repository used for saving the content.
+            metadata_repository (MetadataRepository): The metadata repository used for saving the metadata.
+
+        Returns:
+            None
+        """
+
         self._validate_format(self.content, format)
         self._update_id()
         data_repository.save(

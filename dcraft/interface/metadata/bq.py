@@ -1,6 +1,6 @@
 from google.cloud.bigquery import Client, DatasetReference, SchemaField, Table
 
-from dcraft.domain.layer.base import Metadata
+from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.enum import ContentType
 from dcraft.interface.metadata.base import MetadataRepository
 
@@ -33,6 +33,14 @@ class BqMetadataRepository(MetadataRepository):
         self._client = Client(project=project)
 
     def load(self, id: str) -> Metadata:
+        """Loads the metadata for a specific ID.
+
+        Parameters:
+            - id (str): The ID of the metadata to load.
+
+        Returns:
+            Metadata: The loaded metadata.
+        """
         query = METADATA_GET_QUERY.format(
             self._project, self._dataset_id, self._table_id, id
         )
@@ -52,12 +60,28 @@ class BqMetadataRepository(MetadataRepository):
             )
 
     def save(self, metadata: Metadata):
+        """Saves the given metadata to the specified dataset and table.
+
+        Args:
+            metadata (Metadata): The metadata to be saved.
+
+        Returns:
+            None
+        """
         dataset_ref = DatasetReference(self._project, self._dataset_id)
         table_ref = dataset_ref.table(self._table_id)
         table = Table(table_ref, METADATA_TABLE_SCHEMA)
         self._client.insert_rows(table, rows=[metadata.asdict])
 
     def create_if_not_exist(self):
+        """Creates a dataset and table if they do not already exist.
+
+        Args:
+            None
+
+        Returns:
+            table_ref (TableReference): The reference to the created table.
+        """
         dataset_ref = self._client.dataset(self._dataset_id)
         self._client.create_dataset(self._dataset_id, exists_ok=True)
         table_ref = dataset_ref.table(self._table_id)
