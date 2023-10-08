@@ -1,4 +1,10 @@
-from google.cloud.bigquery import Client, DatasetReference, SchemaField, Table
+from google.cloud.bigquery import (
+    Client,
+    DatasetReference,
+    LoadJobConfig,
+    SchemaField,
+    Table,
+)
 
 from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.enum import ContentType
@@ -60,31 +66,15 @@ class BqMetadataRepository(MetadataRepository):
             )
 
     def save(self, metadata: Metadata):
-        """Saves the given metadata to the specified dataset and table.
-
-        Args:
-            metadata (Metadata): The metadata to be saved.
-
-        Returns:
-            None
-        """
-        dataset_ref = DatasetReference(self._project, self._dataset_id)
-        table_ref = dataset_ref.table(self._table_id)
-        table = Table(table_ref, METADATA_TABLE_SCHEMA)
-        self._client.insert_rows(table, rows=[metadata.asdict])
-
-    def create_if_not_exist(self):
-        """Creates a dataset and table if they do not already exist.
-
-        Args:
-            None
-
-        Returns:
-            table_ref (TableReference): The reference to the created table.
-        """
-        dataset_ref = self._client.dataset(self._dataset_id)
+        metadata_dict = metadata.asdict
+        metadata_dict["created_at"] = metadata_dict["created_at"].isoformat()
         self._client.create_dataset(self._dataset_id, exists_ok=True)
-        table_ref = dataset_ref.table(self._table_id)
-        table = Table(table_ref=table_ref, schema=METADATA_TABLE_SCHEMA)
-        self._client.create_table(table, exists_ok=True)
-        return table_ref
+        job_config = LoadJobConfig(
+            schema=METADATA_TABLE_SCHEMA, write_disposition="WRITE_APPEND"
+        )
+        job = self._client.load_table_from_json(
+            json_rows=[metadata_dict],
+            destination=f"{self._project}.{self._dataset_id}.{self._table_id}",
+            job_config=job_config,
+        )
+        job.result()
