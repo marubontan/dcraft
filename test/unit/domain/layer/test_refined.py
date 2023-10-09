@@ -4,12 +4,30 @@ from datetime import datetime
 
 import pandas as pd
 
+from dcraft.domain.error import NotCoveredContentType
 from dcraft.domain.layer.refined import RefinedLayerData
 from dcraft.domain.loader import read_layer_data
 from dcraft.interface.data.local import LocalDataRepository
 from dcraft.interface.metadata.local import LocalMetadataRepository
 
 from ...setting import SCOPE_PATH
+
+
+def test_refined_layer_data_init():
+    content = {"a": 1, "b": 2}
+    RefinedLayerData(
+        None, "test-project", content, None, datetime.now(), None, None, None
+    )
+
+
+def test_refined_layer_data_init_not_covered_content():
+    content = "test"
+    try:
+        RefinedLayerData(
+            None, "test-project", content, None, datetime.now(), None, None, None
+        )
+    except NotCoveredContentType:
+        pass
 
 
 def test_refined_layer_dict_data_saving(tmp_path):
