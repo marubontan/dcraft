@@ -18,6 +18,7 @@ def read_layer_data(
         metadata.format,
         metadata.content_type,
     )
+    layer_data: Union[RawLayerData, TrustedLayerData, RefinedLayerData]
     if metadata.layer == "raw":
         layer_data = RawLayerData(
             id,

@@ -46,9 +46,9 @@ class RawLayerData(BaseLayerData):
             extra_info=extra_info,
         )
 
-    def _compose_metadata(self, format: str) -> Metadata:
+    def _compose_metadata(self, id: str, format: str) -> Metadata:
         return Metadata(
-            id=self._id,
+            id=id,
             project_name=self._project_name,
             layer="raw",
             content_type=self._get_content_type(self._content),
@@ -59,9 +59,6 @@ class RawLayerData(BaseLayerData):
             source_ids=None,
             format=format,
         )
-
-    def _update_id(self):
-        self._id = str(uuid4())
 
     def save(
         self,
@@ -81,14 +78,15 @@ class RawLayerData(BaseLayerData):
             None
         """
         self._validate_format(self._content, format)
-        self._update_id()
+        id = self._generate_id()
+        self._update_id(id)
         data_repository.save(
             self.content,
             self._project_name,
             "raw",
-            self._id,
+            id,
             format,
             self._get_content_type(self._content),
         )
-        metadata = self._compose_metadata(format)
+        metadata = self._compose_metadata(id, format)
         metadata_repository.save(metadata)

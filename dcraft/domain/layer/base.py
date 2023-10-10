@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Optional
+from uuid import uuid4
 
 import pandas as pd
 
@@ -9,6 +10,7 @@ from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.content import CoveredContentType
 from dcraft.domain.type.enum import ContentType
 from dcraft.interface.data.base import DataRepository
+from dcraft.interface.metadata.base import MetadataRepository
 
 
 class BaseLayerData(ABC):
@@ -43,13 +45,18 @@ class BaseLayerData(ABC):
         return self._id
 
     @abstractmethod
-    def save(self, content: Any, format: str, data_repository: DataRepository):
+    def save(
+        self,
+        format: str,
+        data_repository: DataRepository,
+        metadata_repository: MetadataRepository,
+    ):
         """Save the content in the specified format using the provided data repository.
 
         Args:
-            content (Any): The content to be saved.
-            format (str): The format in which the content should be saved.
-            data_repository (DataRepository): The data repository to use for saving the content.
+            format (str): The format in which the content will be saved.
+            data_repository (DataRepository): The data repository where the content will be saved.
+            metadata_repository (MetadataRepository): The metadata repository where the metadata will be saved.
 
         Returns:
             None
@@ -66,7 +73,7 @@ class BaseLayerData(ABC):
                 raise NotCoveredFormat("This format is not covered.")
 
     @abstractmethod
-    def _compose_metadata(self, format: str) -> Metadata:
+    def _compose_metadata(self, id: str, format: str) -> Metadata:
         pass
 
     @staticmethod
@@ -81,3 +88,10 @@ class BaseLayerData(ABC):
             return ContentType.DICT_LIST
         else:
             raise NotCoveredContentType("This content type is not covered.")
+
+    @staticmethod
+    def _generate_id() -> str:
+        return str(uuid4())
+
+    def _update_id(self, id: str):
+        self._id = id

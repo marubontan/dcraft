@@ -47,7 +47,10 @@ def test_raw_layer_dict_data_saving(tmp_path):
         saved_metadata["created_at"] = datetime.fromisoformat(
             saved_metadata["created_at"]
         )
-        assert saved_metadata == raw_data_layer._compose_metadata("json").asdict
+        assert (
+            saved_metadata
+            == raw_data_layer._compose_metadata(raw_data_layer._id, "json").asdict
+        )
 
 
 def test_raw_layer_pandas_data_saving(tmp_path):
@@ -70,7 +73,10 @@ def test_raw_layer_pandas_data_saving(tmp_path):
         saved_metadata["created_at"] = datetime.fromisoformat(
             saved_metadata["created_at"]
         )
-        assert saved_metadata == raw_data_layer._compose_metadata("csv").asdict
+        assert (
+            saved_metadata
+            == raw_data_layer._compose_metadata(raw_data_layer._id, "csv").asdict
+        )
 
 
 def test_raw_layer_load():
