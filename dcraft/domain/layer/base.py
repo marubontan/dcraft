@@ -25,7 +25,6 @@ class BaseLayerData(ABC):
         self._id = id
         self._project_name = project_name
         self._content = content
-        self._content_type = self._get_content_type(content)
         self._author = author
         self._created_at = created_at
         self._description = description
@@ -34,6 +33,10 @@ class BaseLayerData(ABC):
     @property
     def content(self) -> Any:
         return self._content
+
+    @property
+    def content_type(self) -> ContentType:
+        return self._get_content_type(self._content)
 
     @property
     def id(self) -> Optional[str]:

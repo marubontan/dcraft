@@ -54,7 +54,7 @@ class RefinedLayerData(BaseLayerData):
             id=self._id,
             project_name=self._project_name,
             layer="refined",
-            content_type=self._content_type,
+            content_type=self._get_content_type(self._content),
             author=self._author,
             created_at=self._created_at,
             description=self._description,
@@ -84,7 +84,7 @@ class RefinedLayerData(BaseLayerData):
             None
         """
 
-        self._validate_format(self.content, format)
+        self._validate_format(self._content, format)
         self._update_id()
         data_repository.save(
             self.content,
@@ -92,7 +92,7 @@ class RefinedLayerData(BaseLayerData):
             "refined",
             self._id,
             format,
-            self._content_type,
+            self._get_content_type(self._content),
         )
         metadata = self._compose_metadata(format)
         metadata_repository.save(metadata)
