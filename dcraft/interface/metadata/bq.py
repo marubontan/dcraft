@@ -1,10 +1,4 @@
-from google.cloud.bigquery import (
-    Client,
-    DatasetReference,
-    LoadJobConfig,
-    SchemaField,
-    Table,
-)
+from google.cloud.bigquery import Client, LoadJobConfig, SchemaField
 
 from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.enum import ContentType
@@ -52,7 +46,7 @@ class BqMetadataRepository(MetadataRepository):
         )
         query_job = self._client.query(query)
         for result in query_job.result():
-            return Metadata(
+            metadata = Metadata(
                 id=result["id"],
                 project_name=result["project_name"],
                 layer=result["layer"],
@@ -64,6 +58,7 @@ class BqMetadataRepository(MetadataRepository):
                 source_ids=result["source_ids"],
                 format=result["format"],
             )
+        return metadata
 
     def save(self, metadata: Metadata):
         metadata_dict = metadata.asdict

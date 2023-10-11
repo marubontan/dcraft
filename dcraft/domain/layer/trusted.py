@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import List, Optional
-from uuid import uuid4
 
 from dcraft.domain.layer.base import BaseLayerData
 from dcraft.domain.metadata import Metadata
