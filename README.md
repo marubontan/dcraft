@@ -16,6 +16,16 @@ dataset -> RawDataLayer -(cleaning and validation)-> TrustedDataLayer -(optimize
 ```
 For each layer, you can save the data and metadata to several places such as local file system and GCP.  
 
+## Covered Storage and Table
+You can save the metadata and data on several places. The list below is the present coverage.  
+
+### Metadata
+* Local File System
+* BigQuery
+
+### Data
+* Local File System
+* Google Cloud Storage
 
 ## Example
 Create layer's data. There are `create_trusted` and `create_refined` too.  
@@ -49,5 +59,18 @@ The data was saved to raw layer and information were saved as metadata.
 You can read the saved data from metadata's id. The format is kept.  
 ```python
 from dcraft import read_layer_data
-loaded_raw_layer_data = read_layer_data("id-from-metadata", data_repository, metadata_repository)
+loaded_raw_layer_data = read_layer_data(<id-from-metadata>, data_repository, metadata_repository)
+```
+If you want to save the metadata and data on different places such as BigQuery and Google Cloud Storage, you can use different `Repository` class.  
+```python
+from dcraft import BqMetadataRepository, GcsDataRepository
+
+GCP_PROJECT = "your-project-id"
+GCS_BUCKET = "your-bucket-name"
+
+data_repository = GcsDataRepository(GCP_PROJECT, GCS_BUCKET)
+metadata_repository = BqMetadataRepository(GCP_PROJECT, "test_dataset", "test_table")
+
+raw_layer_data.save("csv", data_repository, metadata_repository)
+
 ```

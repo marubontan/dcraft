@@ -46,6 +46,28 @@ def test_save():
 
 
 @mark.integration
+def test_save_with_optional_information():
+    metadata = Metadata(
+        id="test-id",
+        project_name="test-project",
+        layer="raw",
+        content_type=ContentType.DICT,
+        author="test-author",
+        created_at=datetime(2023, 1, 1),
+        description="test-description",
+        extra_info={"a": 1, "b": 2},
+        source_ids=["test-source-1", "test-source-2"],
+        format="json",
+    )
+
+    metadata_repository = BqMetadataRepository(
+        GCP_PROJECT, "test_dataset", "test_table"
+    )
+
+    metadata_repository.save(metadata)
+
+
+@mark.integration
 def test_load():
     metadata_repository = BqMetadataRepository(
         GCP_PROJECT, "test_dataset", "test_table"
