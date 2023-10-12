@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import List, Optional
-from uuid import uuid4
 
 from dcraft.domain.layer.base import BaseLayerData
 from dcraft.domain.metadata import Metadata
@@ -49,9 +48,9 @@ class TrustedLayerData(BaseLayerData):
         )
         self._source_ids = source_ids
 
-    def _compose_metadata(self, format: str) -> Metadata:
+    def _compose_metadata(self, id: str, format: str) -> Metadata:
         return Metadata(
-            id=self._id,
+            id=id,
             project_name=self._project_name,
             layer="trusted",
             content_type=self._get_content_type(self._content),
@@ -62,9 +61,6 @@ class TrustedLayerData(BaseLayerData):
             source_ids=self._source_ids,
             format=format,
         )
-
-    def _update_id(self):
-        self._id = str(uuid4())
 
     def save(
         self,
@@ -83,14 +79,15 @@ class TrustedLayerData(BaseLayerData):
             None
         """
         self._validate_format(self._content, format)
-        self._update_id()
+        id = self._generate_id()
+        self._update_id(id)
         data_repository.save(
             self.content,
             self._project_name,
             "trusted",
-            self._id,
+            id,
             format,
             self._get_content_type(self._content),
         )
-        metadata = self._compose_metadata(format)
+        metadata = self._compose_metadata(id, format)
         metadata_repository.save(metadata)

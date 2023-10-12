@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 
 import pandas as pd
+import pytest
 
 from dcraft.domain.error import NotCoveredContentType
 from dcraft.domain.layer.refined import RefinedLayerData
@@ -22,12 +23,10 @@ def test_refined_layer_data_init():
 
 def test_refined_layer_data_init_not_covered_content():
     content = "test"
-    try:
+    with pytest.raises(NotCoveredContentType):
         RefinedLayerData(
             None, "test-project", content, None, datetime.now(), None, None, None
         )
-    except NotCoveredContentType:
-        pass
 
 
 def test_refined_layer_dict_data_saving(tmp_path):
@@ -51,7 +50,41 @@ def test_refined_layer_dict_data_saving(tmp_path):
         saved_metadata["created_at"] = datetime.fromisoformat(
             saved_metadata["created_at"]
         )
-        assert saved_metadata == refined_data_layer._compose_metadata("json").asdict
+        assert (
+            saved_metadata
+            == refined_data_layer._compose_metadata(
+                refined_data_layer._id, "json"
+            ).asdict
+        )
+
+
+def test_refined_layer_dict_list_data_saving(tmp_path):
+    content = [{"a": 1, "b": 2}, {"a": 3, "b": 4}]
+    refined_data_layer = RefinedLayerData(
+        None, "test-project", content, None, datetime.now(), None, None, None
+    )
+
+    data_repository = LocalDataRepository(tmp_path)
+    metadata_repository = LocalMetadataRepository(tmp_path)
+    refined_data_layer.save("json", data_repository, metadata_repository)
+    with open(
+        os.path.join(
+            tmp_path, "test-project", "refined", f"{refined_data_layer.id}.json"
+        )
+    ) as f:
+        assert json.load(f) == content
+
+    with open(os.path.join(tmp_path, "metadata.jsonl")) as f:
+        saved_metadata = json.load(f)
+        saved_metadata["created_at"] = datetime.fromisoformat(
+            saved_metadata["created_at"]
+        )
+        assert (
+            saved_metadata
+            == refined_data_layer._compose_metadata(
+                refined_data_layer._id, "json"
+            ).asdict
+        )
 
 
 def test_refined_layer_pandas_data_saving(tmp_path):
@@ -76,7 +109,12 @@ def test_refined_layer_pandas_data_saving(tmp_path):
         saved_metadata["created_at"] = datetime.fromisoformat(
             saved_metadata["created_at"]
         )
-        assert saved_metadata == refined_data_layer._compose_metadata("csv").asdict
+        assert (
+            saved_metadata
+            == refined_data_layer._compose_metadata(
+                refined_data_layer._id, "csv"
+            ).asdict
+        )
 
 
 def test_trusted_layer_load():

@@ -1,10 +1,6 @@
-from google.cloud.bigquery import (
-    Client,
-    DatasetReference,
-    LoadJobConfig,
-    SchemaField,
-    Table,
-)
+import json
+
+from google.cloud.bigquery import Client, LoadJobConfig, SchemaField
 
 from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.enum import ContentType
@@ -52,7 +48,7 @@ class BqMetadataRepository(MetadataRepository):
         )
         query_job = self._client.query(query)
         for result in query_job.result():
-            return Metadata(
+            metadata = Metadata(
                 id=result["id"],
                 project_name=result["project_name"],
                 layer=result["layer"],
@@ -60,14 +56,22 @@ class BqMetadataRepository(MetadataRepository):
                 author=result["author"],
                 created_at=result["created_at"],
                 description=result["description"],
-                extra_info=result["extra_info"],
+                extra_info=json.loads(result["extra_info"])
+                if result["extra_info"] is not None
+                else None,
                 source_ids=result["source_ids"],
                 format=result["format"],
             )
+        return metadata
 
     def save(self, metadata: Metadata):
         metadata_dict = metadata.asdict
         metadata_dict["created_at"] = metadata_dict["created_at"].isoformat()
+        metadata_dict["extra_info"] = (
+            json.dumps(metadata_dict["extra_info"])
+            if metadata_dict["extra_info"] is not None
+            else None
+        )
         self._client.create_dataset(self._dataset_id, exists_ok=True)
         job_config = LoadJobConfig(
             schema=METADATA_TABLE_SCHEMA, write_disposition="WRITE_APPEND"
