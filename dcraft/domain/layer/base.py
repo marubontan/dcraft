@@ -24,6 +24,7 @@ class BaseLayerData(ABC):
         description: Optional[str],
         extra_info: Optional[dict],
     ):
+        self._get_content_type(content)
         self._id = id
         self._project_name = project_name
         self._content = content
