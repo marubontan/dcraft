@@ -1,7 +1,6 @@
 from datetime import datetime
 from uuid import uuid4
 
-from pymongo import MongoClient
 from pytest import fixture, mark
 
 from dcraft.domain.metadata import Metadata
