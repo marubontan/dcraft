@@ -5,7 +5,11 @@ from pytest import fixture, mark
 
 from dcraft.domain.metadata import Metadata
 from dcraft.domain.type.enum import ContentType
-from dcraft.interface.metadata.mongo import MongoMetadataRepository
+
+try:
+    from dcraft.interface.metadata.mongo import MongoMetadataRepository
+except ModuleNotFoundError:
+    pass
 
 from ...setting import MONGO_COLLECTION, MONGO_DB, MONGO_HOST, MONGO_PORT
 
