@@ -21,7 +21,7 @@ except ImportError:
     WITH_BQ = False
 
 try:
-    from dcraft import *
+    from dcraft import MongoMetadataRepository
 
     WITH_MONGO = True
 except ImportError:
