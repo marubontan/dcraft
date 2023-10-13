@@ -14,7 +14,7 @@ from dcraft import (
 
 try:
     from dcraft import BqMetadataRepository, GcsDataRepository
-except ModuleNotFoundError:
+except ImportError:
     pass
 
 from .setting import BQ_DATASET_ID, BQ_TABLE_ID, GCP_PROJECT, GCS_BUCKET

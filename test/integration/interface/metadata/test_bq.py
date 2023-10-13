@@ -8,7 +8,7 @@ from dcraft.domain.type.enum import ContentType
 
 try:
     from dcraft.interface.metadata.bq import BqMetadataRepository
-except ModuleNotFoundError:
+except ImportError:
     pass
 
 from ...setting import GCP_PROJECT
