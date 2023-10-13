@@ -14,6 +14,11 @@ try:
 except ImportError:
     pass
 
+try:
+    from dcraft.interface.metadata.mongo import MongoMetadataRepository
+except ImportError:
+    pass
+
 __all__ = [
     "RawLayerData",
     "TrustedLayerData",
@@ -26,4 +31,5 @@ __all__ = [
     "LocalMetadataRepository",
     "GcsDataRepository",
     "BqMetadataRepository",
+    "MongoMetadataRepository",
 ]

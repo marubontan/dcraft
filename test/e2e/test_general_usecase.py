@@ -19,6 +19,13 @@ try:
 
 except ImportError:
     WITH_BQ = False
+
+try:
+    from dcraft import *
+
+    WITH_MONGO = True
+except ImportError:
+    WITH_MONGO = False
 try:
     from dcraft import GcsDataRepository
 
@@ -26,7 +33,16 @@ try:
 except ImportError:
     WITH_GCS = False
 
-from .setting import BQ_DATASET_ID, BQ_TABLE_ID, GCP_PROJECT, GCS_BUCKET
+from .setting import (
+    BQ_DATASET_ID,
+    BQ_TABLE_ID,
+    GCP_PROJECT,
+    GCS_BUCKET,
+    MONGO_COLLECTION,
+    MONGO_DB,
+    MONGO_HOST,
+    MONGO_PORT,
+)
 
 
 def compose_parameters():
@@ -36,6 +52,8 @@ def compose_parameters():
     METADATA_REPOSITORIES = [LocalMetadataRepository]
     if WITH_BQ:
         METADATA_REPOSITORIES.append(BqMetadataRepository)
+    if WITH_MONGO:
+        METADATA_REPOSITORIES.append(MongoMetadataRepository)
     DICT_CONTENTS = [{"a": 1, "b": 2}, [{"a": 1, "b": 2}, {"a": 3, "b": 4}]]
     DICT_FORMATS = ["json"]
     DF_CONTENTS = [pd.DataFrame({"a": [1], "b": [2]})]
@@ -74,9 +92,13 @@ def test_general_usecase(
         data_repository = data_repository_class(GCP_PROJECT, GCS_BUCKET)
     if metadata_repository_class is LocalMetadataRepository:
         metadata_repository = metadata_repository_class(tmp_path)
-    else:
+    elif metadata_repository_class is BqMetadataRepository:
         metadata_repository = metadata_repository_class(
             GCP_PROJECT, BQ_DATASET_ID, BQ_TABLE_ID
+        )
+    else:
+        metadata_repository = metadata_repository_class(
+            MONGO_HOST, MONGO_PORT, MONGO_DB, MONGO_COLLECTION
         )
 
     # Create layers data
