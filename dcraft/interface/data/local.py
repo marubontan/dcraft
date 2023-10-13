@@ -47,7 +47,7 @@ class LocalDataRepository(DataRepository):
                 raise ContentExtensionMismatch(
                     "This content can't be saved with this extension."
                 )
-        elif content_type == ContentType.DICT:
+        elif content_type in [ContentType.DICT, ContentType.DICT_LIST]:
             if format == "json":
                 with open(path, "r") as f:
                     data = json.load(f)
