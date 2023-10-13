@@ -19,15 +19,15 @@ except ImportError:
 
 from .setting import BQ_DATASET_ID, BQ_TABLE_ID, GCP_PROJECT, GCS_BUCKET
 
-DATA_REPOSITORIES = [LocalDataRepository, GcsDataRepository]
-METADATA_REPOSITORIES = [LocalMetadataRepository, BqMetadataRepository]
-DICT_CONTENTS = [{"a": 1, "b": 2}, [{"a": 1, "b": 2}, {"a": 3, "b": 4}]]
-DICT_FORMATS = ["json"]
-DF_CONTENTS = [pd.DataFrame({"a": [1], "b": [2]})]
-DF_FORMATS = ["csv", "parquet"]
-
 
 def compose_parameters():
+    DATA_REPOSITORIES = [LocalDataRepository, GcsDataRepository]
+    METADATA_REPOSITORIES = [LocalMetadataRepository, BqMetadataRepository]
+    DICT_CONTENTS = [{"a": 1, "b": 2}, [{"a": 1, "b": 2}, {"a": 3, "b": 4}]]
+    DICT_FORMATS = ["json"]
+    DF_CONTENTS = [pd.DataFrame({"a": [1], "b": [2]})]
+    DF_FORMATS = ["csv", "parquet"]
+
     data_and_metadata = list(product(DATA_REPOSITORIES, METADATA_REPOSITORIES))
     dict_content_and_format = product(DICT_CONTENTS, DICT_FORMATS)
     df_content_and_format = product(DF_CONTENTS, DF_FORMATS)
@@ -40,13 +40,10 @@ def compose_parameters():
     ]
 
 
-PARAMETERS = compose_parameters()
-
-
 @mark.e2e
 @mark.parametrize(
     "data_repository_class, metadata_repository_class, content, format, raw_to_trusted_processor, trusted_to_refined_processor",
-    PARAMETERS,
+    compose_parameters(),
 )
 def test_general_usecase(
     data_repository_class,
