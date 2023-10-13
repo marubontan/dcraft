@@ -62,6 +62,7 @@ class BqMetadataRepository(MetadataRepository):
                 source_ids=result["source_ids"],
                 format=result["format"],
             )
+            break
         return metadata
 
     def save(self, metadata: Metadata):

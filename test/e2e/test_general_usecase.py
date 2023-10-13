@@ -4,8 +4,6 @@ import pandas as pd
 from pytest import mark
 
 from dcraft import (
-    BqMetadataRepository,
-    GcsDataRepository,
     LocalDataRepository,
     LocalMetadataRepository,
     create_raw,
@@ -13,6 +11,11 @@ from dcraft import (
     create_trusted,
     read_layer_data,
 )
+
+try:
+    from dcraft import BqMetadataRepository, GcsDataRepository
+except ModuleNotFoundError:
+    pass
 
 from .setting import BQ_DATASET_ID, BQ_TABLE_ID, GCP_PROJECT, GCS_BUCKET
 
