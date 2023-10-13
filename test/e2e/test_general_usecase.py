@@ -14,15 +14,28 @@ from dcraft import (
 
 try:
     from dcraft import BqMetadataRepository, GcsDataRepository
+
+    WITH_BQ = True
+
 except ImportError:
-    pass
+    WITH_BQ = False
+try:
+    from dcraft import GcsDataRepository
+
+    WITH_GCS = True
+except ImportError:
+    WITH_GCS = False
 
 from .setting import BQ_DATASET_ID, BQ_TABLE_ID, GCP_PROJECT, GCS_BUCKET
 
 
 def compose_parameters():
-    DATA_REPOSITORIES = [LocalDataRepository, GcsDataRepository]
-    METADATA_REPOSITORIES = [LocalMetadataRepository, BqMetadataRepository]
+    DATA_REPOSITORIES = [LocalDataRepository]
+    if WITH_GCS:
+        DATA_REPOSITORIES.append(GcsDataRepository)
+    METADATA_REPOSITORIES = [LocalMetadataRepository]
+    if WITH_BQ:
+        METADATA_REPOSITORIES.append(BqMetadataRepository)
     DICT_CONTENTS = [{"a": 1, "b": 2}, [{"a": 1, "b": 2}, {"a": 3, "b": 4}]]
     DICT_FORMATS = ["json"]
     DF_CONTENTS = [pd.DataFrame({"a": [1], "b": [2]})]
