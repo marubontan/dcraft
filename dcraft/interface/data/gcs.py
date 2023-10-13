@@ -54,7 +54,7 @@ class GcsDataRepository(DataRepository):
                 raise ContentExtensionMismatch(
                     "This content can't be saved with this extension."
                 )
-        elif content_type == ContentType.DICT:
+        elif content_type in [ContentType.DICT, ContentType.DICT_LIST]:
             if format == "json":
                 blob = self._bucket.blob(path)
                 dict_bytes = blob.download_as_text()
@@ -109,7 +109,7 @@ class GcsDataRepository(DataRepository):
                 raise ContentExtensionMismatch(
                     "This content can't be saved with this extension."
                 )
-        elif content_type == ContentType.DICT:
+        elif content_type in [ContentType.DICT, ContentType.DICT_LIST]:
             if format == "json":
                 data = json.dumps(content)
                 blob.upload_from_string(data)
