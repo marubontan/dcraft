@@ -25,7 +25,7 @@ def test_init():
 
 
 @mark.integration
-def test_save_dict_json():
+def test_save_dict_list_json():
     data_repository = GcsDataRepository(GCP_PROJECT, GCS_BUCKET)
     content = [{"a": 2, "b": 2}, {"a": 2, "b": 2}]
     data_repository.save(
@@ -39,7 +39,7 @@ def test_save_dict_json():
 
 
 @mark.integration
-def test_load_dict_json():
+def test_load_dict_list_json():
     data_repository = GcsDataRepository(GCP_PROJECT, GCS_BUCKET)
     loaded_content = data_repository.load(
         "test-project", "raw", "test-id", "json", ContentType.DICT
@@ -49,7 +49,7 @@ def test_load_dict_json():
 
 
 @mark.integration
-def test_save_dict_list_json():
+def test_save_dict_json():
     data_repository = GcsDataRepository(GCP_PROJECT, GCS_BUCKET)
     content = {"a": 2, "b": 2}
     data_repository.save(
@@ -63,7 +63,7 @@ def test_save_dict_list_json():
 
 
 @mark.integration
-def test_load_dict_list_json():
+def test_load_dict_json():
     data_repository = GcsDataRepository(GCP_PROJECT, GCS_BUCKET)
     loaded_content = data_repository.load(
         "test-project", "raw", "test-id", "json", ContentType.DICT
