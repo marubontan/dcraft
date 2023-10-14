@@ -66,6 +66,14 @@ class BqMetadataRepository(MetadataRepository):
         return metadata
 
     def save(self, metadata: Metadata):
+        """Save the given metadata to the dataset.
+
+        Args:
+            metadata (Metadata): The metadata object to save.
+
+        Returns:
+            None
+        """
         metadata_dict = metadata.asdict
         metadata_dict["created_at"] = metadata_dict["created_at"].isoformat()
         metadata_dict["extra_info"] = (

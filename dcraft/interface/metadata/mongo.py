@@ -16,6 +16,14 @@ class MongoMetadataRepository(MetadataRepository):
         self._client = MongoClient(host, port)
 
     def load(self, id: str) -> Metadata:
+        """Loads metadata for a specific ID.
+
+        Args:
+            id (str): The ID of the metadata to load.
+
+        Returns:
+            Metadata: The loaded metadata object.
+        """
         collection = self._client[self._db][self._collection]
         cursor = collection.find({"id": id})
         for document in cursor:
@@ -37,6 +45,14 @@ class MongoMetadataRepository(MetadataRepository):
         return metadata
 
     def save(self, metadata: Metadata):
+        """Save the given metadata to the database.
+
+        Args:
+            metadata (Metadata): The metadata object to save.
+
+        Returns:
+            None
+        """
         metadata_dict = metadata.asdict
         metadata_dict["extra_info"] = (
             json.dumps(metadata_dict["extra_info"])
