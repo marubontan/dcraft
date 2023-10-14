@@ -1,6 +1,30 @@
 # dcraft [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![deployment workflow](https://github.com/marubontan/dcraft/actions/workflows/publish-to-pypi.yml/badge.svg)
 Data management library based on data lake concept especially for data science and machine leaning.  
-This helps your daily job's data management by raw, trusted and refined layer concept from data lake. The data is versioned and saved for each layer.  
+This helps your daily job's data management by raw, trusted and refined layer concept from data lake. The data is versioned and saved for each layer on specified storages and tables.  
+## Concept
+For daily individual work and for team work, we need to manage and organize our datasets to keep clean workflow. This library is to help that based on the data lake's layer concept.  
+For each layer, you can save the data and metadata to several places such as local file system, GCP and MongoDB which you choose.  
+
+## Covered Data type
+* pd.DataFrame
+* Dict
+* List of Dict
+
+## Covered Format
+* csv
+* parquet
+* json
+## Covered Storage and Table
+You can save the metadata and data on several places. The list below is the present coverage.  
+
+### Metadata
+* Local File System
+* BigQuery
+* MongoDB
+
+### Data
+* Local File System
+* Google Cloud Storage
 ## Installation
 ```
 pip install dcraft
@@ -9,23 +33,6 @@ To use GCP resources.
 ```
 pip install dcraft[gcp]
 ```
-## Concept
-For daily individual work and for team work, we need to manage and organize our datasets to keep clean workflow. This library is to help that based on the data lake's layer concept.  
-```
-dataset -> RawDataLayer -(cleaning and validation)-> TrustedDataLayer -(optimized for use case)-> RefinedDataLayer
-```
-For each layer, you can save the data and metadata to several places such as local file system and GCP.  
-
-## Covered Storage and Table
-You can save the metadata and data on several places. The list below is the present coverage.  
-
-### Metadata
-* Local File System
-* BigQuery
-
-### Data
-* Local File System
-* Google Cloud Storage
 
 ## Example
 Create layer's data. There are `create_trusted` and `create_refined` too.  
