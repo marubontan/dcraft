@@ -28,6 +28,14 @@ dcraft.interface.metadata.local module
    :undoc-members:
    :show-inheritance:
 
+dcraft.interface.metadata.mongo module
+--------------------------------------
+
+.. automodule:: dcraft.interface.metadata.mongo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 dcraft.interface.metadata.setting module
 ----------------------------------------
 
