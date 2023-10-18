@@ -77,7 +77,7 @@ This example stores metadata and data on the local file system.
 .. code-block:: python
 
     from dcraft import read_layer_data
-    loaded_raw_layer_data = read_layer_data("<id-from-metadata>", data_repository, metadata_repository)
+    loaded_raw_layer_data = read_layer_data(raw_layer_data.id, data_repository, metadata_repository)
 
 
 For trusted and refined, you can do same.  
@@ -99,7 +99,7 @@ For trusted and refined, you can do same.
 
     refined_content = trusted_layer_data.content * 2
     refined_layer_data = create_refined(
-        content,
+        refined_content,
         "fake-project",
         "Shuhei Kishi",
         "This is fake project",
