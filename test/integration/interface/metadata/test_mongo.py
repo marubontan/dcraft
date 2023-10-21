@@ -22,7 +22,7 @@ def id():
 @mark.integration
 def test_init():
     metadata_repository = MongoMetadataRepository(
-        MONGO_HOST, MONGO_PORT, MONGO_DB, MONGO_COLLECTION
+        MONGO_DB, MONGO_COLLECTION, MONGO_HOST, MONGO_PORT
     )
     assert metadata_repository._host == MONGO_HOST
     assert metadata_repository._port == MONGO_PORT
@@ -46,7 +46,7 @@ def test_save(id):
     )
 
     metadata_repository = MongoMetadataRepository(
-        MONGO_HOST, MONGO_PORT, MONGO_DB, MONGO_COLLECTION
+        MONGO_DB, MONGO_COLLECTION, MONGO_HOST, MONGO_PORT
     )
     metadata_repository.save(metadata)
 
@@ -54,7 +54,10 @@ def test_save(id):
 @mark.integration
 def test_load(id):
     metadata_repository = MongoMetadataRepository(
-        MONGO_HOST, MONGO_PORT, MONGO_DB, MONGO_COLLECTION
+        MONGO_DB,
+        MONGO_COLLECTION,
+        MONGO_HOST,
+        MONGO_PORT,
     )
     metadata = metadata_repository.load(id)
     assert metadata == Metadata(
@@ -87,7 +90,10 @@ def test_save_with_optional_information(id):
     )
 
     metadata_repository = MongoMetadataRepository(
-        MONGO_HOST, MONGO_PORT, MONGO_DB, MONGO_COLLECTION
+        MONGO_DB,
+        MONGO_COLLECTION,
+        MONGO_HOST,
+        MONGO_PORT,
     )
 
     metadata_repository.save(metadata)

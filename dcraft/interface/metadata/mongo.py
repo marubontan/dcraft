@@ -1,5 +1,7 @@
 import json
+from typing import Any, Sequence
 
+from bson.codec_options import TypeRegistry
 from pymongo import MongoClient
 
 from dcraft.domain.metadata import Metadata
@@ -8,12 +10,29 @@ from dcraft.interface.metadata.base import MetadataRepository
 
 
 class MongoMetadataRepository(MetadataRepository):
-    def __init__(self, host: str, port: int, db: str, collection: str):
+    def __init__(
+        self,
+        db: str,
+        collection: str,
+        host: str | Sequence[str] | None = None,
+        port: int | None = None,
+        document_class: Any | None = None,
+        tz_aware: bool | None = None,
+        connect: bool | None = None,
+        type_registry: TypeRegistry | None = None,
+    ):
         self._host = host
         self._port = port
         self._db = db
         self._collection = collection
-        self._client = MongoClient(host, port)
+        self._client = MongoClient(
+            host=host,
+            port=port,
+            document_class=document_class,
+            tz_aware=tz_aware,
+            connect=connect,
+            type_registry=type_registry,
+        )
 
     def load(self, id: str) -> Metadata:
         """Loads metadata for a specific ID.

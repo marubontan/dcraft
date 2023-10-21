@@ -1,4 +1,5 @@
 import json
+from typing import Any, Optional
 
 from google.cloud.bigquery import Client, LoadJobConfig, SchemaField
 
@@ -28,11 +29,32 @@ WHERE id = '{}'
 
 
 class BqMetadataRepository(MetadataRepository):
-    def __init__(self, project: str, dataset_id: str, table_id: str):
+    def __init__(
+        self,
+        project: str,
+        dataset_id: str,
+        table_id: str,
+        credentials: Optional[Any] = None,
+        _http: Optional[Any] = None,
+        location: Optional[Any] = None,
+        default_query_job_config: Optional[Any] = None,
+        default_load_job_config: Optional[Any] = None,
+        client_info: Optional[Any] = None,
+        client_options: Optional[Any] = None,
+    ):
         self._project = project
         self._dataset_id = dataset_id
         self._table_id = table_id
-        self._client = Client(project=project)
+        self._client = Client(
+            project=project,
+            credentials=credentials,
+            _http=_http,
+            location=location,
+            default_query_job_config=default_query_job_config,
+            default_load_job_config=default_load_job_config,
+            client_info=client_info,
+            client_options=client_options,
+        )
 
     def load(self, id: str) -> Metadata:
         """Loads the metadata for a specific ID.
