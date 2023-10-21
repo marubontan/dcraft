@@ -25,6 +25,8 @@ You can save the metadata and data on several places. The list below is the pres
 ### Data
 * Local File System
 * Google Cloud Storage
+* MinIO
+
 ## Installation
 ```
 pip install dcraft

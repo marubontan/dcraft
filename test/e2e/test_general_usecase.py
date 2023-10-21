@@ -33,11 +33,22 @@ try:
 except ImportError:
     WITH_GCS = False
 
+try:
+    from dcraft import MinioRepository
+
+    WITH_MINIO = True
+except ImportError:
+    WITH_MINIO = False
+
 from .setting import (
     BQ_DATASET_ID,
     BQ_TABLE_ID,
     GCP_PROJECT,
     GCS_BUCKET,
+    MINIO_ACCESS_KEY,
+    MINIO_BUCKET,
+    MINIO_ENDPOINT,
+    MINIO_SECRET_KEY,
     MONGO_COLLECTION,
     MONGO_DB,
     MONGO_HOST,
@@ -54,6 +65,8 @@ def compose_parameters():
         METADATA_REPOSITORIES.append(BqMetadataRepository)
     if WITH_MONGO:
         METADATA_REPOSITORIES.append(MongoMetadataRepository)
+    if WITH_MINIO:
+        DATA_REPOSITORIES.append(MinioRepository)
     DICT_CONTENTS = [{"a": 1, "b": 2}, [{"a": 1, "b": 2}, {"a": 3, "b": 4}]]
     DICT_FORMATS = ["json"]
     DF_CONTENTS = [pd.DataFrame({"a": [1], "b": [2]})]
@@ -88,8 +101,12 @@ def test_general_usecase(
     # Define reqpositories
     if data_repository_class is LocalDataRepository:
         data_repository = data_repository_class(tmp_path)
-    else:
+    elif data_repository_class is GcsDataRepository:
         data_repository = data_repository_class(GCP_PROJECT, GCS_BUCKET)
+    else:
+        data_repository = data_repository_class(
+            MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        )
     if metadata_repository_class is LocalMetadataRepository:
         metadata_repository = metadata_repository_class(tmp_path)
     elif metadata_repository_class is BqMetadataRepository:
