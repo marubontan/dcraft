@@ -28,6 +28,14 @@ dcraft.interface.data.local module
    :undoc-members:
    :show-inheritance:
 
+dcraft.interface.data.minio module
+----------------------------------
+
+.. automodule:: dcraft.interface.data.minio
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

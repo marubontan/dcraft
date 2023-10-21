@@ -19,6 +19,11 @@ try:
 except ImportError:
     pass
 
+try:
+    from dcraft.interface.data.minio import MinioRepository
+except ImportError:
+    pass
+
 __all__ = [
     "RawLayerData",
     "TrustedLayerData",
@@ -32,4 +37,5 @@ __all__ = [
     "GcsDataRepository",
     "BqMetadataRepository",
     "MongoMetadataRepository",
+    "MinioRepository",
 ]
