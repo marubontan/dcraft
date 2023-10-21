@@ -26,7 +26,12 @@ class MongoMetadataRepository(MetadataRepository):
         self._db = db
         self._collection = collection
         self._client = MongoClient(
-            host, port, document_class, tz_aware, connect, type_registry
+            host=host,
+            port=port,
+            document_class=document_class,
+            tz_aware=tz_aware,
+            connect=connect,
+            type_registry=type_registry,
         )
 
     def load(self, id: str) -> Metadata:

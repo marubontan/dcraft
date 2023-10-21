@@ -46,14 +46,14 @@ class BqMetadataRepository(MetadataRepository):
         self._dataset_id = dataset_id
         self._table_id = table_id
         self._client = Client(
-            project,
-            credentials,
-            _http,
-            location,
-            default_query_job_config,
-            default_load_job_config,
-            client_info,
-            client_options,
+            project=project,
+            credentials=credentials,
+            _http=_http,
+            location=location,
+            default_query_job_config=default_query_job_config,
+            default_load_job_config=default_load_job_config,
+            client_info=client_info,
+            client_options=client_options,
         )
 
     def load(self, id: str) -> Metadata:

@@ -29,15 +29,15 @@ class MinioRepository(DataRepository):
     ):
         # TODO: Accept parameters which Minio gets
         self._client = Minio(
-            endpoint,
-            access_key,
-            secret_key,
-            session_token,
-            secure,
-            region,
-            http_client,
-            credentials,
-            cert_check,
+            endpoint=endpoint,
+            access_key=access_key,
+            secret_key=secret_key,
+            session_token=session_token,
+            secure=secure,
+            region=region,
+            http_client=http_client,
+            credentials=credentials,
+            cert_check=cert_check,
         )
         self._bucket = bucket
 
