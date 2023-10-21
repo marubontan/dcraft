@@ -105,7 +105,11 @@ def test_general_usecase(
         data_repository = data_repository_class(GCP_PROJECT, GCS_BUCKET)
     else:
         data_repository = data_repository_class(
-            MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+            MINIO_ENDPOINT,
+            MINIO_BUCKET,
+            MINIO_ACCESS_KEY,
+            MINIO_SECRET_KEY,
+            secure=False,
         )
     if metadata_repository_class is LocalMetadataRepository:
         metadata_repository = metadata_repository_class(tmp_path)
@@ -115,7 +119,7 @@ def test_general_usecase(
         )
     else:
         metadata_repository = metadata_repository_class(
-            MONGO_HOST, MONGO_PORT, MONGO_DB, MONGO_COLLECTION
+            MONGO_DB, MONGO_COLLECTION, MONGO_HOST, MONGO_PORT
         )
 
     # Create layers data

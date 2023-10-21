@@ -1,5 +1,6 @@
 import json
 from io import BytesIO, StringIO
+from typing import Any, Optional
 
 import pandas as pd
 from google.cloud.storage import Client
@@ -11,9 +12,25 @@ from dcraft.interface.data.base import DataRepository
 
 
 class GcsDataRepository(DataRepository):
-    def __init__(self, project_id: str, bucket_name: str):
+    def __init__(
+        self,
+        project_id: str,
+        bucket_name: str,
+        credentials: Optional[Any] = None,
+        _http: Optional[Any] = None,
+        client_info: Optional[Any] = None,
+        client_options: Optional[Any] = None,
+        use_auth_w_custom_endpoint: bool = True,
+    ):
         self._bucket_name = bucket_name
-        self._client = Client(project=project_id)
+        self._client = Client(
+            project=project_id,
+            credentials=credentials,
+            _http=_http,
+            client_info=client_info,
+            client_options=client_options,
+            use_auth_w_custom_endpoint=use_auth_w_custom_endpoint,
+        )
         self._bucket = self._client.get_bucket(self._bucket_name)
 
     def load(
