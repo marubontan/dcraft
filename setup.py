@@ -8,7 +8,7 @@ test_requires = ["pytest"]
 
 setup(
     name="dcraft",
-    version="0.5.0",
+    version="0.5.1",
     packages=find_packages(exclude=["tests"]),
     install_requires=deps,
     test_requires=test_requires,
