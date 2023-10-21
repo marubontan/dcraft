@@ -21,7 +21,7 @@ from ...setting import MINIO_ACCESS_KEY, MINIO_BUCKET, MINIO_ENDPOINT, MINIO_SEC
 @mark.integration
 def test_init():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY
     )
     assert data_repository._bucket == MINIO_BUCKET
 
@@ -29,7 +29,7 @@ def test_init():
 @mark.integration
 def test_save_dict_list_json():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     content = [{"a": 2, "b": 2}, {"a": 2, "b": 2}]
     data_repository.save(
@@ -45,7 +45,7 @@ def test_save_dict_list_json():
 @mark.integration
 def test_load_dict_list_json():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     loaded_content = data_repository.load(
         "test-project", "raw", "test-id", "json", ContentType.DICT
@@ -57,7 +57,7 @@ def test_load_dict_list_json():
 @mark.integration
 def test_save_dict_json():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     content = {"a": 2, "b": 2}
     data_repository.save(
@@ -73,7 +73,7 @@ def test_save_dict_json():
 @mark.integration
 def test_load_dict_json():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     loaded_content = data_repository.load(
         "test-project", "raw", "test-id", "json", ContentType.DICT
@@ -85,7 +85,7 @@ def test_load_dict_json():
 @mark.integration
 def test_save_df_csv():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     content = pd.DataFrame({"a": [1], "b": [2]})
     data_repository.save(
@@ -101,7 +101,7 @@ def test_save_df_csv():
 @mark.integration
 def test_load_df_csv():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     loaded_content = data_repository.load(
         "test-project", "raw", "test-id", "csv", ContentType.DF
@@ -113,7 +113,7 @@ def test_load_df_csv():
 @mark.integration
 def test_save_df_parquet():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     content = pd.DataFrame({"a": [1], "b": [2]})
     data_repository.save(
@@ -129,7 +129,7 @@ def test_save_df_parquet():
 @mark.integration
 def test_load_df_parquet():
     data_repository = MinioRepository(
-        MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET
+        MINIO_ENDPOINT, MINIO_BUCKET, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, secure=False
     )
     loaded_content = data_repository.load(
         "test-project", "raw", "test-id", "parquet", ContentType.DF

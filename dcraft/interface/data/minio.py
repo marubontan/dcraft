@@ -1,8 +1,11 @@
 import json
 from io import BytesIO, StringIO
+from typing import Optional
 
 import pandas as pd
 from minio import Minio
+from minio.credentials.providers import Provider
+from urllib3 import PoolManager
 
 from dcraft.domain.error import ContentExtensionMismatch, NotCoveredContentType
 from dcraft.domain.type.content import CoveredContentType
@@ -11,9 +14,31 @@ from dcraft.interface.data.base import DataRepository
 
 
 class MinioRepository(DataRepository):
-    def __init__(self, endpoint: str, access_key: str, secret_key: str, bucket: str):
+    def __init__(
+        self,
+        endpoint: str,
+        bucket: str,
+        access_key: Optional[str] = None,
+        secret_key: Optional[str] = None,
+        session_token: Optional[str] = None,
+        secure: bool = True,
+        region: Optional[str] = None,
+        http_client: Optional[PoolManager] = None,
+        credentials: Optional[Provider] = None,
+        cert_check: bool = True,
+    ):
         # TODO: Accept parameters which Minio gets
-        self._client = Minio(endpoint, access_key, secret_key, secure=False)
+        self._client = Minio(
+            endpoint,
+            access_key,
+            secret_key,
+            session_token,
+            secure,
+            region,
+            http_client,
+            credentials,
+            cert_check,
+        )
         self._bucket = bucket
 
     def load(
