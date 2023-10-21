@@ -23,7 +23,22 @@ class MinioRepository(DataRepository):
         id: str,
         format: str,
         content_type: ContentType,
-    ):
+    ) -> CoveredContentType:
+        """Load the specified content from the given project, layer, and ID.
+
+        Args:
+            project_name (str): The name of the project.
+            layer_name (str): The name of the layer.
+            id (str): The ID of the content.
+            format (str): The format of the content.
+            content_type (ContentType): The type of the content.
+
+        Returns:
+            CoveredContentType: The loaded content.
+
+        Raises:
+            ContentExtensionMismatch: If the content cannot be saved with the given extension.
+        """
         path = self._compose_path(project_name, layer_name, id, format)
         if content_type == ContentType.DF:
             if format == "csv":
@@ -59,6 +74,21 @@ class MinioRepository(DataRepository):
         format: str,
         content_type: ContentType,
     ):
+        """Save the content to a specified location in the bucket.
+
+        Args:
+            content (CoveredContentType): The content to be saved.
+            project_name (str): The name of the project.
+            layer_name (str): The name of the layer.
+            id (str): The unique identifier.
+            format (str): The format of the content.
+            content_type (ContentType): The type of the content.
+
+        Raises:
+            ContentExtensionMismatch: If the content cannot be saved with the given extension.
+            NotCoveredContentType: If the content type is not supported.
+
+        """
         path = self._compose_path(project_name, layer_name, id, format)
         if content_type == ContentType.DF:
             if format == "csv":
