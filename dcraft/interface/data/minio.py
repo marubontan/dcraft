@@ -39,6 +39,7 @@ class MinioRepository(DataRepository):
             credentials=credentials,
             cert_check=cert_check,
         )
+
         self._bucket = bucket
 
     def load(
