@@ -12,6 +12,7 @@ Data
 
 * Local
 * Google Cloud Storage
+* MinIO
 
 ---------
 Metadata
@@ -19,6 +20,7 @@ Metadata
 
 * Local
 * BigQuery
+* MongoDB
 
 
 
