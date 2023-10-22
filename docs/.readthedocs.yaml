@@ -9,8 +9,10 @@ build:
      - sphinx-apidoc -f -o docs/source/code_generated dcraft
 
 python:
+  setup_py_install: true
   install:
-    - requirements: docs/requirements.txt
+    - method: pip
+      path: .
 
 sphinx:
   configuration: docs/source/conf.py
