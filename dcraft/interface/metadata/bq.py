@@ -42,6 +42,20 @@ class BqMetadataRepository(MetadataRepository):
         client_info: Optional[Any] = None,
         client_options: Optional[Any] = None,
     ):
+        """Initializes a new instance of the class.
+
+        Args:
+            project (str): The project ID.
+            dataset_id (str): The dataset ID.
+            table_id (str): The table ID.
+            credentials (Any, optional): The credentials to authenticate the client. Defaults to None.
+            _http (Any, optional): The HTTP transport layer. Defaults to None.
+            location (Any, optional): The location of the job. Defaults to None.
+            default_query_job_config (Any, optional): The default configuration for query jobs. Defaults to None.
+            default_load_job_config (Any, optional): The default configuration for load jobs. Defaults to None.
+            client_info (Any, optional): The client info. Defaults to None.
+            client_options (Any, optional): The client options. Defaults to None.
+        """
         self._project = project
         self._dataset_id = dataset_id
         self._table_id = table_id

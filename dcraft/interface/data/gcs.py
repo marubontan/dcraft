@@ -22,6 +22,17 @@ class GcsDataRepository(DataRepository):
         client_options: Optional[Any] = None,
         use_auth_w_custom_endpoint: bool = True,
     ):
+        """Initializes a new instance of the class.
+
+        Args:
+            project_id (str): The project ID.
+            bucket_name (str): The name of the bucket.
+            credentials (Any, optional): The credentials to use for authentication. Defaults to None.
+            _http (Any, optional): The HTTP object to use for requests. Defaults to None.
+            client_info (Any, optional): The client info to include in requests. Defaults to None.
+            client_options (Any, optional): The client options. Defaults to None.
+            use_auth_w_custom_endpoint (bool, optional): Whether to use authentication with a custom endpoint. Defaults to True.
+        """
         self._bucket_name = bucket_name
         self._client = Client(
             project=project_id,
