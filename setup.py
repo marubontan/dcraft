@@ -5,6 +5,7 @@ gcp_deps = ["google-cloud-storage>=2.6.0", "google-cloud-bigquery", "pyarrow"]
 mongo_deps = ["pymongo"]
 minio_deps = ["minio"]
 test_requires = ["pytest"]
+all_requirements = deps + gcp_deps + mongo_deps + minio_deps
 
 setup(
     name="dcraft",
@@ -19,6 +20,7 @@ setup(
         "mongo": mongo_deps,
         "minio": minio_deps,
         "test": test_requires,
+        "all": all_requirements
     },
     author="Shuhei Kishi",
 )
