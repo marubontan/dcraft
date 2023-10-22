@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(f"...{os.path.sep}"))
+sys.path.insert(0, os.path.abspath(os.path.join("..", "..")))
 
 project = "dcraft"
 copyright = "2023, Shuhei Kishi"
