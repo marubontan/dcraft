@@ -5,4 +5,3 @@ dcraft
    :maxdepth: 4
 
    dcraft
-   setup

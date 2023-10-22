@@ -1,5 +1,5 @@
 import json
-from typing import Any, Sequence
+from typing import Any, Optional, Sequence, Union
 
 from bson.codec_options import TypeRegistry
 from pymongo import MongoClient
@@ -14,13 +14,25 @@ class MongoMetadataRepository(MetadataRepository):
         self,
         db: str,
         collection: str,
-        host: str | Sequence[str] | None = None,
-        port: int | None = None,
-        document_class: Any | None = None,
-        tz_aware: bool | None = None,
-        connect: bool | None = None,
-        type_registry: TypeRegistry | None = None,
+        host: Optional[Union[str, Sequence[str]]] = None,
+        port: Optional[int] = None,
+        document_class: Optional[Any] = None,
+        tz_aware: Optional[bool] = None,
+        connect: Optional[bool] = None,
+        type_registry: Optional[TypeRegistry] = None,
     ):
+        """Initializes a new instance of the class.
+
+        Args:
+            db (str): The name of the database.
+            collection (str): The name of the collection.
+            host (Optional[Union[str, Sequence[str]]], optional): The host(s) to connect to. Defaults to None.
+            port (Optional[int], optional): The port number. Defaults to None.
+            document_class (Optional[Any], optional): The default class to use for documents. Defaults to None.
+            tz_aware (Optional[bool], optional): Whether to be timezone aware. Defaults to None.
+            connect (Optional[bool], optional): Whether to connect on initialization. Defaults to None.
+            type_registry (Optional[TypeRegistry], optional): The type registry. Defaults to None.
+        """
         self._host = host
         self._port = port
         self._db = db

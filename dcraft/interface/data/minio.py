@@ -27,6 +27,24 @@ class MinioRepository(DataRepository):
         credentials: Optional[Provider] = None,
         cert_check: bool = True,
     ):
+        """
+        Initializes the MinioClient object.
+
+        Args:
+            endpoint (str): The MinIO server endpoint URL.
+            bucket (str): The bucket name.
+            access_key (str, optional): The access key. Defaults to None.
+            secret_key (str, optional): The secret key. Defaults to None.
+            session_token (str, optional): The session token. Defaults to None.
+            secure (bool, optional): Whether to use secure (HTTPS) connections. Defaults to True.
+            region (str, optional): The region. Defaults to None.
+            http_client (PoolManager, optional): The HTTP client. Defaults to None.
+            credentials (Provider, optional): The credentials provider. Defaults to None.
+            cert_check (bool, optional): Whether to check the server's SSL certificate. Defaults to True.
+
+        Returns:
+            None
+        """
         # TODO: Accept parameters which Minio gets
         self._client = Minio(
             endpoint=endpoint,
